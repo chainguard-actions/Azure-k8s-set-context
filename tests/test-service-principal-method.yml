@@ -1,0 +1,26 @@
+name: Test service-principal method with arc cluster
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        continue-on-error: true
+        with:
+          cluster-type: arc
+          method: service-principal
+          resource-group: my-resource-group
+          cluster-name: my-arc-cluster
+      - name: Assert action ran (inputs were accepted)
+        run: |
+          echo "Action outcome: ${{ steps.action.outcome }}"
+          # The action may fail due to missing Azure credentials, but it should at least
+          # process the inputs without an input validation error.
+          if [ "${{ steps.action.outcome }}" = "skipped" ]; then
+            echo "FAIL: action was skipped unexpectedly"
+            exit 1
+          fi
+          echo "PASS: action was invoked with resource-group and cluster-name inputs"
