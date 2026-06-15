@@ -9,6 +9,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 | Version | Tag | Upstream commit |
 |---------|-----|-----------------|
 | v4.0.0 | [`v4.0.0`](https://github.com/chainguard-actions/Azure-k8s-set-context/tree/v4.0.0) | [`27bfb38`](https://github.com/Azure/k8s-set-context/commit/27bfb387305b8f0ab5495d692e4a3304db7d0669) |
+| v4.0.1 | [`v4.0.1`](https://github.com/chainguard-actions/Azure-k8s-set-context/tree/v4.0.1) | [`212a192`](https://github.com/Azure/k8s-set-context/commit/212a19233d93f03eceaac31ae5a1d1acf650b6ef) |
 
 ## Privacy
 
