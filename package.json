@@ -1,0 +1,39 @@
+{
+   "name": "k8s-set-context-action",
+   "version": "5.0.0",
+   "private": true,
+   "main": "lib/index.js",
+   "type": "module",
+   "scripts": {
+      "build": "tsc --noEmit && esbuild src/run.ts --bundle --platform=node --target=node20 --format=esm --outfile=lib/index.js --banner:js=\"import { createRequire } from 'module';const require = createRequire(import.meta.url);\"",
+      "typecheck": "tsc --noEmit",
+      "test": "vitest run",
+      "test-coverage": "vitest run --coverage",
+      "format": "prettier --write .",
+      "format-check": "prettier --check .",
+      "prepare": "husky"
+   },
+   "keywords": [
+      "actions",
+      "node",
+      "setup"
+   ],
+   "author": "GitHub",
+   "license": "MIT",
+   "dependencies": {
+      "@actions/core": "^3.0.0",
+      "@actions/exec": "^3.0.0",
+      "@actions/io": "^3.0.2",
+      "@kubernetes/client-node": "^1.4.0",
+      "husky": "^9.1.7",
+      "js-yaml": "^4.1.1"
+   },
+   "devDependencies": {
+      "@types/js-yaml": "^4.0.9",
+      "@types/node": "^25.5.2",
+      "esbuild": "^0.28.0",
+      "prettier": "^3.8.0",
+      "typescript": "^6.0.2",
+      "vitest": "^4.1.1"
+   }
+}
