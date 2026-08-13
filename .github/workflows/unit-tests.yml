@@ -1,0 +1,23 @@
+name: Run Unit Tests
+on:
+   pull_request:
+      branches:
+         - main
+         - 'releases/*'
+   push:
+      branches:
+         - main
+         - 'releases/*'
+
+permissions:
+   contents: read
+
+jobs:
+   unit-test:
+      runs-on: ubuntu-latest
+      steps:
+         - uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # v1
+         - name: Run Unit Tests
+           run: |
+              npm install
+              npm test
