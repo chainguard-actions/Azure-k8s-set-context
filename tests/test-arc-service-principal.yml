@@ -1,0 +1,78 @@
+name: Test arc cluster with service-principal method
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Install fake az CLI
+        run: |
+          mkdir -p "$RUNNER_TEMP/fakebin"
+          rm -f /tmp/fake-az-args.log
+          cat > "$RUNNER_TEMP/fakebin/az" <<'EOF'
+          #!/bin/sh
+          echo "$*" >> /tmp/fake-az-args.log
+          out=""
+          prev=""
+          for arg in "$@"; do
+            if [ "$prev" = "-f" ]; then out="$arg"; fi
+            prev="$arg"
+          done
+          if [ -n "$out" ]; then
+            cat > "$out" <<'KCFG'
+          apiVersion: v1
+          kind: Config
+          clusters:
+          - cluster:
+              server: https://arc-proxy.example.com
+            name: arc-cluster
+          contexts:
+          - context:
+              cluster: arc-cluster
+              user: arc-user
+            name: arc-context
+          current-context: arc-context
+          users:
+          - name: arc-user
+            user:
+              token: fake-arc-token
+          KCFG
+          fi
+          exit 0
+          EOF
+          chmod +x "$RUNNER_TEMP/fakebin/az"
+          echo "$RUNNER_TEMP/fakebin" >> "$GITHUB_PATH"
+      - id: action
+        uses: .
+        with:
+          cluster-type: arc
+          method: service-principal
+          resource-group: my-test-rg
+          cluster-name: my-arc-cluster
+      - name: Assert az invoked with resource group and cluster name
+        run: |
+          echo "az invocations:"
+          cat /tmp/fake-az-args.log
+          if ! grep -q "extension add -n connectedk8s" /tmp/fake-az-args.log; then
+            echo "FAIL: connectedk8s extension not added"
+            exit 1
+          fi
+          if ! grep -q "connectedk8s proxy -n my-arc-cluster -g my-test-rg -f" /tmp/fake-az-args.log; then
+            echo "FAIL: proxy not invoked with expected cluster name / resource group"
+            exit 1
+          fi
+          echo "PASS"
+      - name: Assert KUBECONFIG exported with arc kubeconfig
+        run: |
+          echo "KUBECONFIG: $KUBECONFIG"
+          if [ -z "$KUBECONFIG" ] || [ ! -f "$KUBECONFIG" ]; then
+            echo "FAIL: KUBECONFIG not set or file missing"
+            exit 1
+          fi
+          cat "$KUBECONFIG"
+          if ! grep -q "arc-proxy.example.com" "$KUBECONFIG"; then
+            echo "FAIL: kubeconfig does not contain arc server"
+            exit 1
+          fi
+          echo "PASS"

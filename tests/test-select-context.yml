@@ -1,0 +1,55 @@
+name: Test selecting a specific context
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          method: kubeconfig
+          context: ctx-b
+          kubeconfig: |
+            apiVersion: v1
+            kind: Config
+            clusters:
+            - cluster:
+                server: https://a.example.com
+              name: cluster-a
+            - cluster:
+                server: https://b.example.com
+              name: cluster-b
+            contexts:
+            - context:
+                cluster: cluster-a
+                user: user-a
+              name: ctx-a
+            - context:
+                cluster: cluster-b
+                user: user-b
+              name: ctx-b
+            current-context: ctx-a
+            users:
+            - name: user-a
+              user:
+                token: token-a
+            - name: user-b
+              user:
+                token: token-b
+      - name: Assert current context switched to ctx-b
+        run: |
+          echo "KUBECONFIG=$KUBECONFIG"
+          [ -f "$KUBECONFIG" ] || { echo "FAIL: kubeconfig file missing"; exit 1; }
+          cat "$KUBECONFIG"; echo
+          if grep -qE 'current-context"?[[:space:]]*:[[:space:]]*"?ctx-b' "$KUBECONFIG"; then
+            echo "PASS: current-context is ctx-b"
+          else
+            echo "FAIL: current-context not ctx-b"; exit 1
+          fi
+          if grep -qE 'current-context"?[[:space:]]*:[[:space:]]*"?ctx-a' "$KUBECONFIG"; then
+            echo "FAIL: current-context still ctx-a"; exit 1
+          fi
+          grep -q 'https://b.example.com' "$KUBECONFIG" || { echo "FAIL: cluster-b missing"; exit 1; }
+          echo "PASS"
