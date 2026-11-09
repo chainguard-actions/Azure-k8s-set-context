@@ -12,6 +12,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 | v4.0.1 | [`v4.0.1`](https://github.com/chainguard-actions/Azure-k8s-set-context/tree/v4.0.1) | [`212a192`](https://github.com/Azure/k8s-set-context/commit/212a19233d93f03eceaac31ae5a1d1acf650b6ef) | [`HARDENING.md`](https://github.com/chainguard-actions/Azure-k8s-set-context/blob/v4.0.1/HARDENING.md) |
 | v5.0.0 | [`v5.0.0`](https://github.com/chainguard-actions/Azure-k8s-set-context/tree/v5.0.0) | [`89b837d`](https://github.com/Azure/k8s-set-context/commit/89b837d75b40a7bd2ddafde837473c212db8b313) | [`HARDENING.md`](https://github.com/chainguard-actions/Azure-k8s-set-context/blob/v5.0.0/HARDENING.md) |
 | v5.0.1 | [`v5.0.1`](https://github.com/chainguard-actions/Azure-k8s-set-context/tree/v5.0.1) | [`8698eba`](https://github.com/Azure/k8s-set-context/commit/8698eba2499e9012f0d5085f8798077cce4bc526) | [`HARDENING.md`](https://github.com/chainguard-actions/Azure-k8s-set-context/blob/v5.0.1/HARDENING.md) |
+| v5.0.2 | [`v5.0.2`](https://github.com/chainguard-actions/Azure-k8s-set-context/tree/v5.0.2) | [`5f008df`](https://github.com/Azure/k8s-set-context/commit/5f008dfddbbc9df61ba40a7aaa912c6033ba62fc) | [`HARDENING.md`](https://github.com/chainguard-actions/Azure-k8s-set-context/blob/v5.0.2/HARDENING.md) |
 
 ## Privacy
 
